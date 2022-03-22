@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Check the Weather!</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h2 class="p-title">Weather Dashboard</h2>
+          </div>
+        </div>
+        </div>
+
+    <div class="container">
+        <div class="row">
+
+            <!-- side for form -->
+            <aside style="background-color: purple;" 
+                   class="col-sm-4" 
+                   id="display-form">
+
+                   <form>
+                    <fieldset>
+                      <legend>Enter your City</legend>
+                      <label for="username">City Name</label>
+                      <input type="text" id="Username" placeholder="Sacramento"/>
+                      <button type="button" id="search-button">search</button>
+                    </fieldset>
+                  </form>
+
+                  <h4>recent searches</h4>
+                  <div class="col-sm-12" id="history">
+                    <button type="submit" class="text-center">Name</button>
+                  </div>
+
+            </aside>
+
+            <!-- side for display -->
+            <section class="col-sm-8" style="background-color: brown;">
+                <div class="row">
+
+            <!-- side for todays date -->
+                    <section 
+                    class="col-sm-12" 
+                    style="background-color: cornflowerblue;">
+                        <h3>Today's Forecast For: <span id="post-city"></span></h3>
+                        <h6 id="todays-date">03/22/21</h6>
+                        <div id="put-today-here" style="background-color: seagreen;">
+                            <p>today</p>
+                            <p>today</p>
+                            <p>today</p>
+                            <p>today</p>
+                        </div>
+                    </section>
+
+            <!-- side for current forecast -->
+                    <section 
+                    class="col-sm-12" 
+                    style="background-color: darkgreen;"
+                    id="place-forecast-card">
+                    <div class="row">
+                        <div class="card small warning section">
+                            <p class="section dark">fasdfasdf</p>
+                            <p>asdfasdf</p>
+                        </div>
+                        
+                    </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+       
+
+
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
