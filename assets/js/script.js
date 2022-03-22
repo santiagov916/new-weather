@@ -1,5 +1,5 @@
 // global var
-var historySearch = [];
+var savedCities = [];
 var placeForecastCard = document.querySelector('#place-forecast-card');
 var placeTodayContainer = document.querySelector('#put-today-here');
 var todaysDate = document.querySelector('#todays-date');
@@ -11,7 +11,47 @@ var cityName = document.querySelector('#city');
 var apiWeatherRoot = 'https://api.openweathermap.org';
 var apiKey = 'b0af02ce6d6578e341aee9bf7fa71ce7';
 
+
+function makeHistoryBtn() {
+    console.log(localStorage);
+    historyContainer.innerHTML = '';
+
+    for( var i = savedCities.length - 1; i >= 0; i--) {
+
+        var button = document.createElement('button');
+        button.setAttribute('class', 'history-btn col-sm-12');
+        button.setAttribute('data-search', savedCities[i]);
+        button.textContent = savedCities[i];
+
+
+        historyContainer.append(button);
+    }
+}
+
+function loadSavedSearches() {
+    var lookInsideHistory = localStorage.getItem('history');
+
+    if (lookInsideHistory) {
+        savedCities = JSON.parse(lookInsideHistory);
+    }
+
+    makeHistoryBtn();
+}
+
+function addToHistory(search) {
+
+    if (savedCities.indexOf(search) !== -1) {
+        return;
+    }
+    
+    savedCities.push(search);
+
+    localStorage.setItem('history', JSON.stringify(savedCities));
+    makeHistoryBtn();
+}
+
 function todaysWeather(city, weather) {
+    placeTodayContainer.innerHTML = '';
     console.log(city, weather);
 
     var temp = weather.temp;
@@ -102,6 +142,7 @@ function fetchTheWeather(location) {
         if (response.ok) {
             response.json().then(function(data) {
                 postCityName.textContent = `${city}`;
+    
                 showData(city, data);
             })
         }
@@ -118,7 +159,7 @@ function fetchGeoCode(search) {
      // request was successful
      if (response.ok) {
        response.json().then(function(data) {
-        console.log(data[0]);
+        addToHistory(search);
         fetchTheWeather(data[0]);
        });
      } else {
@@ -137,4 +178,17 @@ function startSearch(e) {
     cityName.value = '';
 }
 
+function historySearch(e) {
+    console.log('here')
+    if (!e.target.matches('.history-btn')) {
+        return;
+    }
+
+    var btn = e.target;
+    var search = btn.getAttribute('data-search');
+    fetchGeoCode(search);
+}
+
+loadSavedSearches()
 searchBtn.addEventListener('click', startSearch);
+historyContainer.addEventListener('click', historySearch);
