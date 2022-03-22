@@ -13,6 +13,24 @@ var apiKey = 'b0af02ce6d6578e341aee9bf7fa71ce7';
 
 function todaysWeather(city, weather) {
     console.log(city, weather);
+
+    var temp = weather.temp;
+    var wind = weather.wind_speed;
+    var humidity = weather.humidity;
+
+    var today = document.createElement('ul');
+
+    var tempList = document.createElement('li');
+    tempList.textContent = `Temp: ${temp}`;
+
+    var windEL = document.createElement('li');
+    windEL.textContent = `Wind: ${wind} mph`;
+
+    var huEl = document.createElement('li');
+    huEl.textContent = `Humidity: ${humidity} %`;
+    
+    today.append(tempList, windEL, huEl);
+    placeTodayContainer.append(today);
 }
 
 function createTheCard(forecast) {
