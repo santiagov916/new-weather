@@ -11,6 +11,65 @@ var cityName = document.querySelector('#city');
 var apiWeatherRoot = 'https://api.openweathermap.org';
 var apiKey = 'b0af02ce6d6578e341aee9bf7fa71ce7';
 
+function todaysWeather(city, weather) {
+    console.log(city, weather);
+}
+
+function createTheCard(forecast) {
+    console.log(forecast);
+
+    // set api data as variable
+    var tempMin = forecast.temp.min;
+    var tempMax = forecast.temp.max;
+    var wind = forecast.wind_speed;
+    var humidity = forecast.humidity;
+
+
+    var cardContainer = document.createElement('div');
+    cardContainer.setAttribute('class', 'row');
+
+    var card = document.createElement('div');
+    card.setAttribute('class', 'card fluid small warning section col-sm-12');
+
+    var minEl = document.createElement('p');
+    minEl.textContent = `Minimum Temp: ${tempMin}`;
+
+    var maxEl = document.createElement('p');
+    maxEl.textContent = `Maximum Temp: ${tempMax}`;
+
+    var windEL = document.createElement('p');
+    windEL.textContent = `Wind Speed: ${wind} mph`;
+
+    var humidityEl = document.createElement('p');
+    humidityEl.textContent = `Humidity: ${humidity} %`;
+
+
+    card.append(minEl, maxEl, windEL, humidityEl);
+    cardContainer.append(card);
+    placeForecastCard.append(cardContainer);
+}
+
+function fiveDay(dailyForecast) {
+    
+    // setup the look:
+    var forecast = document.createElement('h3');
+    forecast.textContent = `5-day forecast: `;
+    placeForecastCard.innerHTML = '';
+    placeForecastCard.append(forecast);
+
+    for (var i = 0; i < dailyForecast.length; i++) {
+        createTheCard(dailyForecast[i]);
+        if (i == 4) {
+            break;
+        }
+    }
+}
+
+function showData(city, data) {
+    todaysWeather(city, data.current);
+    fiveDay(data.daily);
+}
+
 function fetchTheWeather(location) {
 
     var { lon } = location;
@@ -25,6 +84,7 @@ function fetchTheWeather(location) {
         if (response.ok) {
             response.json().then(function(data) {
                 postCityName.textContent = `${city}`;
+                showData(city, data);
             })
         }
     })
