@@ -22,7 +22,7 @@
   
   ## Motivation
 
-  I wanted to use html, css, bootstrap, js, and an api all together in a simple yet awesome project!
+  I wanted to use html, mini.css, js, and an api all together in a simple yet awesome project!
 
   ## Usage
 
