@@ -2,3 +2,8 @@ body {
     box-sizing: border-box;
     background-color: blue;
 }
+
+.icon {
+    height:1rem;
+    width: 1rem;
+}

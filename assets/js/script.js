@@ -11,6 +11,9 @@ var cityName = document.querySelector('#city');
 var apiWeatherRoot = 'https://api.openweathermap.org';
 var apiKey = 'b0af02ce6d6578e341aee9bf7fa71ce7';
 
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
+
 
 function makeHistoryBtn() {
     console.log(localStorage);
@@ -50,13 +53,18 @@ function addToHistory(search) {
     makeHistoryBtn();
 }
 
-function todaysWeather(city, weather) {
+function todaysWeather(city, weather, timezone) {
     placeTodayContainer.innerHTML = '';
     console.log(city, weather);
+
+    var date = dayjs().tz(timezone).format('M/D/YYYY');
 
     var temp = weather.temp;
     var wind = weather.wind_speed;
     var humidity = weather.humidity;
+
+    todaysDate.setAttribute('class', 'ml-5 font-weight-bold');
+    todaysDate.textContent = `${date}`;
 
     var today = document.createElement('ul');
 
@@ -73,8 +81,13 @@ function todaysWeather(city, weather) {
     placeTodayContainer.append(today);
 }
 
-function createTheCard(forecast) {
+function createTheCard(forecast, timezone) {
     console.log(forecast);
+
+    var unixTs = forecast.dt;
+
+    var iconUrl = `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
+    var iconDescription = forecast.weather[0].description;
 
     // set api data as variable
     var tempMin = forecast.temp.min;
@@ -101,13 +114,24 @@ function createTheCard(forecast) {
     var humidityEl = document.createElement('p');
     humidityEl.textContent = `Humidity: ${humidity} %`;
 
+    var cardImg = document.createElement('img');
+    cardImg.setAttribute('src', iconUrl);
+    cardImg.setAttribute('alt', iconDescription);
+    cardImg.classList.add('icon', 'section', 'media');
 
-    card.append(minEl, maxEl, windEL, humidityEl);
+    var dateOf = document.createElement('h5');
+    dateOf.setAttribute('class', 'card-title text-primary');
+    dateOf.textContent =dayjs.unix(unixTs).tz(timezone).format('M/D/YYYY');
+
+    card.append(dateOf, minEl, maxEl, windEL, humidityEl, cardImg);
     cardContainer.append(card);
     placeForecastCard.append(cardContainer);
 }
 
-function fiveDay(dailyForecast) {
+function fiveDay(dailyForecast, timezone) {
+
+    var startDt = dayjs().tz(timezone).add(1, 'day').startOf('day').unix();
+    var endDt = dayjs().tz(timezone).add(6, 'day').startOf('day').unix();
     
     // setup the look:
     var forecast = document.createElement('h3');
@@ -116,16 +140,17 @@ function fiveDay(dailyForecast) {
     placeForecastCard.append(forecast);
 
     for (var i = 0; i < dailyForecast.length; i++) {
-        createTheCard(dailyForecast[i]);
-        if (i == 4) {
-            break;
+        if (dailyForecast[i].dt >= startDt && dailyForecast[i].dt < endDt) {
+
+            createTheCard(dailyForecast[i], timezone);
         }
+        
     }
 }
 
 function showData(city, data) {
-    todaysWeather(city, data.current);
-    fiveDay(data.daily);
+    todaysWeather(city, data.current, data.timezone);
+    fiveDay(data.daily, data.timezone);
 }
 
 function fetchTheWeather(location) {
